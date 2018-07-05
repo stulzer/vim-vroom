@@ -414,7 +414,7 @@ endfunction
 " Internal: Sets t:vroom_test_file to current file
 function s:SetTestFile()
   " Set the test file that tests will be run for.
-  let t:vroom_test_file=@%
+  let t:vroom_test_file=expand('%')
 endfunction
 
 " Internal: Sets t:vroom_nearest_test to current line
