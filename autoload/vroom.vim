@@ -195,7 +195,14 @@ function s:RunTests(filename, args)
   let runner        = get(a:args, 'runner',   s:DetermineRunner(a:filename))
   let filename      = s:DetermineFileArgument(a:filename)
 
-  call s:Run(runner . ' ' . filename)
+  if runner =~ 'rspec'
+    let opts          = get(a:args, 'options',  '')
+    let line_number   = get(a:args, 'line',     '')
+
+    call s:Run(runner . ' ' . opts . ' ' . filename . line_number)
+  else
+    call s:Run(runner . filename)
+  endif
 endfunction
 
 " Internal: Get the right file argument for the test.
