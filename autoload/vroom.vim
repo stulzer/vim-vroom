@@ -93,7 +93,7 @@ if !exists("g:vroom_command_prefix")
 endif
 
 if !exists("g:vroom_test_unit_command")
-  let g:vroom_test_unit_command = 'ruby -Itest '
+  let g:vroom_test_unit_command = 'rake test TEST='
 endif
 
 if !exists("g:vroom_rspec_version")
@@ -193,11 +193,9 @@ function s:RunTests(filename, args)
   call s:PrepareToRunTests(a:filename)
 
   let runner        = get(a:args, 'runner',   s:DetermineRunner(a:filename))
-  let opts          = get(a:args, 'options',  ''                           )
-  let line_number   = get(a:args, 'line',     ''                           )
   let filename      = s:DetermineFileArgument(a:filename)
 
-  call s:Run(runner . ' ' . opts . ' ' . filename . line_number)
+  call s:Run(runner . ' ' . filename)
 endfunction
 
 " Internal: Get the right file argument for the test.
