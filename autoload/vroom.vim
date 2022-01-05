@@ -33,6 +33,10 @@ if !exists("g:vroom_konacha_command")
   let g:vroom_konacha_command = 'rake konacha:run '
 endif
 
+if !exists("g:vroom_jest_command")
+  let g:vroom_jest_command = 'yarn test '
+endif
+
 if !exists("g:vroom_konacha_spec_root")
   let g:vroom_konacha_spec_root = 'spec/javascripts/'
 endif
@@ -228,6 +232,14 @@ function s:DetermineRunner(filename)
     return g:vroom_mix_test_command . s:color_flag
   elseif match(a:filename, '_spec\.js') != -1
     return s:test_runner_prefix . g:vroom_konacha_command
+  elseif match(a:filename, 'spec\.jsx') != -1
+    return s:test_runner_prefix . g:vroom_jest_command
+  elseif match(a:filename, 'spec\.tsx') != -1
+    return s:test_runner_prefix . g:vroom_jest_command
+  elseif match(a:filename, 'spec\.js') != -1
+    return s:test_runner_prefix . g:vroom_jest_command
+  elseif match(a:filename, 'spec\.ts') != -1
+    return s:test_runner_prefix . g:vroom_jest_command
   end
 endfunction
 
