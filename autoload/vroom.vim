@@ -158,7 +158,7 @@ endfunction
 " next time the function is called in a non-test file, it runs the last test
 function s:RunTestFile(args)
   " Run the tests for the previously-marked file.
-  let in_test_file = match(expand("%"), '\(\/test_.*\.rb\)\|\(\.feature\|_spec\.rb\|_test\.exs\|_test\.rb\|_spec\.js.*\)$') != -1
+  let in_test_file = match(expand("%"), '\(\/test_.*\.rb\)\|\(\.feature\|_spec\.rb\|_test\.exs\|_test\.rb\|spec\.tsx|spec\.ts|spec\.jsx|spec\.js.*\)$') != -1
 
   if in_test_file && s:IsNeoTerminal() == 0
     call s:SetTestFile()
