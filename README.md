@@ -12,14 +12,6 @@ Originally forked from Gary Bernhardt's `.vimrc`, now rewritten in Lua for moder
 -- Minimal
 { "stulzer/vim-vroom" }
 
--- With options
-{
-  "stulzer/vim-vroom",
-  opts = {
-    use_binstubs = true,
-  },
-}
-
 -- Very lazy (loads only when command or key is used)
 {
   "stulzer/vim-vroom",
@@ -74,22 +66,22 @@ require("vroom").setup({
   mix_test_command = "mix test",      -- ExUnit command (default: "mix test")
   yarn_test_command = "yarn test",    -- JS/TS test command (default: "yarn test")
   use_colors = true,                  -- Append --color to rspec/mix (default: true)
-  use_bundle_exec = true,             -- Prepend "bundle exec" if Gemfile exists (default: true)
-  use_binstubs = false,               -- Use binstubs directory (default: false)
   binstubs_path = "./bin",            -- Binstubs directory (default: "./bin")
   command_prefix = "",                -- Custom prefix for Docker/SSH (default: "")
 })
 ```
 
-### Rails with Binstubs
+### Binstub Auto-Detection
 
-```lua
-opts = {
-  use_binstubs = true,
-}
-```
+Vroom automatically detects binstubs per command. For each test run, it checks
+if `{binstubs_path}/{command}` exists (e.g., `./bin/rspec`, `./bin/yarn`).
 
-This uses `./bin/rspec` and `./bin/rails test` instead of `bundle exec rspec` and `bundle exec rails test`. Enabling binstubs automatically disables `bundle_exec`.
+- Binstub found → uses it (e.g., `./bin/yarn test file.spec.ts`)
+- No binstub + Ruby + Gemfile → falls back to `bundle exec`
+- Otherwise → bare command
+
+This means mixed projects work out of the box — for example, `./bin/yarn test`
+for JS specs and `bundle exec rspec` for Ruby specs when `./bin/rspec` doesn't exist.
 
 ### Docker / Remote
 
