@@ -10,9 +10,9 @@ vroom.nvim is a Neovim plugin (Lua) for running tests from within Neovim. Suppor
 
 - `plugin/vroom.lua` — Entry point. Defines commands (`:VroomRunTestFile`, `:VroomRunNearestTest`, `:VroomRunLastTest`). Loaded by Neovim automatically.
 - `lua/vroom/init.lua` — Public API: `setup()`, `run_test_file()`, `run_nearest_test()`, `run_last_test()`. Orchestrates all modules.
-- `lua/vroom/config.lua` — Default configuration, merge logic, binstubs/bundle_exec mutual exclusion.
+- `lua/vroom/config.lua` — Default configuration and merge logic.
 - `lua/vroom/runner.lua` — Filename pattern matching to detect test framework, command building.
-- `lua/vroom/prefix.lua` — Prefix chain: binstubs, bundle exec, command_prefix, clear screen.
+- `lua/vroom/prefix.lua` — Prefix chain: auto-detected binstubs, bundle exec fallback, command_prefix, clear screen.
 - `lua/vroom/terminal.lua` — Neovim terminal split management (open, reuse, close).
 - `doc/vroom.txt` — Vim help documentation (`:help vroom`).
 - `tests/` — Plenary-based unit tests.
@@ -32,7 +32,7 @@ nvim --headless -u tests/minimal_init.lua \
 
 1. Command triggered → `run_test_file()` / `run_nearest_test()`
 2. Detect if current buffer is a test file via `runner.is_test_file()`, store path in `vim.t.vroom_test_file`
-3. Save files, build prefix via `prefix.build()` (binstubs or bundle exec, command_prefix, clear screen)
+3. Save files, build prefix via `prefix.build()` (auto-detect binstub or bundle exec fallback, command_prefix, clear screen)
 4. Build full command via `runner.build_command()` (prefix + runner + color flag + filename + line)
 5. Dispatch via `terminal.run()` (Neovim terminal split)
 
@@ -42,4 +42,4 @@ nvim --headless -u tests/minimal_init.lua \
 - `_test.exs` → mix test
 - `.test.{js,ts,jsx,tsx}` / `.spec.{js,ts,jsx,tsx}` / `__tests__/*` → yarn test
 
-**Prefix priority:** binstubs (`./bin/`) OR bundle exec (if Gemfile) → command_prefix → clear screen.
+**Prefix priority:** auto-detected binstub (`./bin/{cmd}` exists?) → bundle exec fallback (Ruby + Gemfile) → command_prefix → clear screen.
